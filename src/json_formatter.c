@@ -266,6 +266,9 @@ json_formatter_read( PG_FUNCTION_ARGS ) {
             case FLOAT4OID:
                 if( json_is_null(val) ) {
                   user_ctx->nulls[i] = true;
+                }  else if( json_is_integer(val) ) {
+                    user_ctx->values[i] = Float4GetDatum( json_real_value( json_real( json_integer_value( val ) ) ) );
+                    user_ctx->nulls[i] = false; 
                 } else if( !json_is_real( val ) ) {
                     MemoryContextSwitchTo( omc );
                     FORMATTER_SET_BAD_ROW_NUM( fcinfo, user_ctx->rownum );
@@ -284,6 +287,9 @@ json_formatter_read( PG_FUNCTION_ARGS ) {
             {
                 if( json_is_null(val) ) {
                   user_ctx->nulls[i] = true;
+                }  else if( json_is_integer(val) ) {
+                    user_ctx->values[i] = Float8GetDatum( json_real_value( json_real( json_integer_value( val ) ) ) );
+                    user_ctx->nulls[i] = false; 
                 } else if( !json_is_real( val ) ) {
                     MemoryContextSwitchTo( omc );
                     FORMATTER_SET_BAD_ROW_NUM( fcinfo, user_ctx->rownum );
